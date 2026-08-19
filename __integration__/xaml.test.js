@@ -44,6 +44,16 @@ describe('integration', async () => {
                 resourceType: 'Color',
               },
             },
+            {
+              destination: 'WpfTokens.xaml',
+              format: xamlResourceDictionary,
+              options: {
+                preset: 'wpf',
+                outputColorBrushes: true,
+                outputReferences: true,
+                resourceReferenceType: 'DynamicResource',
+              },
+            },
           ],
         },
       },
@@ -76,6 +86,15 @@ describe('integration', async () => {
       describe(`with filter`, async () => {
         it(`should match snapshot`, async () => {
           const output = fs.readFileSync(resolve(`${buildPath}Colors.xaml`), {
+            encoding: 'UTF-8',
+          });
+          await expect(output).to.matchSnapshot();
+        });
+      });
+
+      describe(`with WPF preset`, async () => {
+        it(`should match snapshot`, async () => {
+          const output = fs.readFileSync(resolve(`${buildPath}WpfTokens.xaml`), {
             encoding: 'UTF-8',
           });
           await expect(output).to.matchSnapshot();

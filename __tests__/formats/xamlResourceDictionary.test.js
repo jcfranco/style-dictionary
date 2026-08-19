@@ -303,30 +303,165 @@ describe('formats', () => {
       await expect(f).to.matchSnapshot();
     });
 
-    it('should throw for DynamicResource aliases', async () => {
+    it('with WPF aliases and DynamicResource should match snapshot', async () => {
       const allTokens = convertTokenData(referenceTokens, { output: 'array' });
-
-      await expect(
-        format(
-          createFormatArgs({
-            dictionary: {
-              tokens: referenceTokens,
-              allTokens,
-              unfilteredTokens: referenceTokens,
+      const f = await format(
+        createFormatArgs({
+          dictionary: {
+            tokens: referenceTokens,
+            allTokens,
+            unfilteredTokens: referenceTokens,
+          },
+          file: {
+            ...file,
+            options: {
+              preset: 'wpf',
+              outputReferences: true,
+              resourceReferenceType: 'DynamicResource',
+              outputColorBrushes: true,
             },
-            file: {
-              ...file,
-              options: {
-                outputReferences: true,
-                resourceReferenceType: 'DynamicResource',
+          },
+          platform: {},
+        }),
+      );
+      await expect(f).to.matchSnapshot();
+    });
+
+    it('with namespace overrides and root attributes should match snapshot', async () => {
+      const f = await format(
+        createFormatArgs({
+          dictionary: {
+            tokens: baseTokens,
+            allTokens: convertTokenData(baseTokens, { output: 'array' }),
+          },
+          file: {
+            ...file,
+            options: {
+              preset: 'wpf',
+              namespaces: {
+                local: 'clr-namespace:MyApp.Resources',
+              },
+              rootAttributes: {
+                'mc:Ignorable': 'd',
               },
             },
-            platform: {},
-          }),
-        ),
-      ).to.be.rejectedWith(
-        'xaml/resourceDictionary cannot emit token aliases with resourceReferenceType "DynamicResource" for token "ColorAlias"; .NET MAUI ResourceDictionary entries must be concrete values. Use "StaticResource" or disable outputReferences.',
+          },
+          platform: {},
+        }),
       );
+      await expect(f).to.matchSnapshot();
+    });
+
+    it('with a tokenValueSerializer should match snapshot', async () => {
+      const tokens = {
+        size: {
+          spacing: {
+            value: '1.25rem',
+            type: 'dimension',
+            original: {
+              value: '1.25rem',
+            },
+            name: 'SpacingMedium',
+            path: ['size', 'spacing'],
+          },
+        },
+      };
+
+      const f = await format(
+        createFormatArgs({
+          dictionary: {
+            tokens,
+            allTokens: convertTokenData(tokens, { output: 'array' }),
+          },
+          file: {
+            ...file,
+            options: {
+              preset: 'wpf',
+              tokenValueSerializer: ({ token, value, resourceType, serializeValue, options }) => {
+                if (
+                  token.type === 'dimension' &&
+                  typeof value === 'string' &&
+                  value.endsWith('rem')
+                ) {
+                  return {
+                    resourceType: 'x:Double',
+                    value: String(Number.parseFloat(value) * 16),
+                  };
+                }
+
+                return {
+                  resourceType,
+                  value: serializeValue(value, resourceType, token, options),
+                };
+              },
+            },
+          },
+          platform: {},
+        }),
+      );
+      await expect(f).to.matchSnapshot();
+    });
+
+    it('with a resourceFactory should match snapshot', async () => {
+      const tokens = {
+        size: {
+          padding: {
+            value: {
+              top: 4,
+              right: 8,
+              bottom: 4,
+              left: 8,
+            },
+            type: 'spacing',
+            original: {
+              value: {
+                top: 4,
+                right: 8,
+                bottom: 4,
+                left: 8,
+              },
+            },
+            name: 'PaddingCard',
+            path: ['size', 'padding'],
+          },
+        },
+      };
+
+      const f = await format(
+        createFormatArgs({
+          dictionary: {
+            tokens,
+            allTokens: convertTokenData(tokens, { output: 'array' }),
+          },
+          file: {
+            ...file,
+            options: {
+              preset: 'wpf',
+              resourceFactory: ({ token, value, resourceType, createResource }) => {
+                if (
+                  token.type === 'spacing' &&
+                  typeof value === 'object' &&
+                  value !== null &&
+                  'top' in value &&
+                  'right' in value &&
+                  'bottom' in value &&
+                  'left' in value
+                ) {
+                  return createResource(
+                    token,
+                    'Thickness',
+                    [value.left, value.top, value.right, value.bottom].join(','),
+                  );
+                }
+
+                return createResource(token, resourceType, '');
+              },
+            },
+          },
+          platform: {},
+        }),
+      );
+      await expect(f).to.matchSnapshot();
     });
 
     it('should throw for unsupported object values', async () => {

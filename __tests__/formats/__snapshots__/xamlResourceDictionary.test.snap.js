@@ -106,3 +106,67 @@ snapshots["formats xaml/resourceDictionary with DynamicResource brush references
 </ResourceDictionary>
 `;
 /* end snapshot formats xaml/resourceDictionary with DynamicResource brush references should match snapshot */
+snapshots["formats xaml/resourceDictionary with WPF aliases and DynamicResource should match snapshot"] = 
+`<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Do not edit directly, this file was auto-generated.
+-->
+<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Color x:Key="ColorBase">#FF0B8599</Color>
+  <x:Double x:Key="SizeBase">8</x:Double>
+  <DynamicResource x:Key="ColorAlias" ResourceKey="ColorBase" />
+  <DynamicResource x:Key="SizeAlias" ResourceKey="SizeBase" />
+  <SolidColorBrush x:Key="ColorBaseBrush" Color="{DynamicResource ColorBase}" />
+  <SolidColorBrush x:Key="ColorAliasBrush" Color="{DynamicResource ColorAlias}" />
+</ResourceDictionary>
+`;
+/* end snapshot formats xaml/resourceDictionary with WPF aliases and DynamicResource should match snapshot */
+
+snapshots["formats xaml/resourceDictionary with namespace overrides and root attributes should match snapshot"] = 
+`<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Do not edit directly, this file was auto-generated.
+-->
+<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:local="clr-namespace:MyApp.Resources"
+  mc:Ignorable="d">
+  <!-- Brand primary color -->
+  <Color x:Key="ColorBrandPrimary">#FF0B8599</Color>
+  <x:Double x:Key="SizeCornerRadiusMedium">8</x:Double>
+  <x:Double x:Key="FontSizeBody">16</x:Double>
+  <x:String x:Key="GreetingText">Hello &amp; goodbye</x:String>
+  <x:Boolean x:Key="IsEnabled">True</x:Boolean>
+</ResourceDictionary>
+`;
+/* end snapshot formats xaml/resourceDictionary with namespace overrides and root attributes should match snapshot */
+
+snapshots["formats xaml/resourceDictionary with a tokenValueSerializer should match snapshot"] = 
+`<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Do not edit directly, this file was auto-generated.
+-->
+<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Double x:Key="SpacingMedium">20</x:Double>
+</ResourceDictionary>
+`;
+/* end snapshot formats xaml/resourceDictionary with a tokenValueSerializer should match snapshot */
+
+snapshots["formats xaml/resourceDictionary with a resourceFactory should match snapshot"] = 
+`<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Do not edit directly, this file was auto-generated.
+-->
+<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Thickness x:Key="PaddingCard">8,4,8,4</Thickness>
+</ResourceDictionary>
+`;
+/* end snapshot formats xaml/resourceDictionary with a resourceFactory should match snapshot */
+
