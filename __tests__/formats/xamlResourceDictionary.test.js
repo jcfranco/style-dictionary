@@ -340,6 +340,7 @@ describe('formats', () => {
               preset: 'wpf',
               namespaces: {
                 local: 'clr-namespace:MyApp.Resources',
+                mc: 'http://schemas.openxmlformats.org/markup-compatibility/2006',
               },
               rootAttributes: {
                 'mc:Ignorable': 'd',

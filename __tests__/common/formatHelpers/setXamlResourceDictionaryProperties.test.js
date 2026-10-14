@@ -58,6 +58,18 @@ describe('setXamlResourceDictionaryProperties', () => {
     });
   });
 
+  it('should throw when a prefixed root attribute has no matching namespace', () => {
+    expect(() =>
+      setXamlResourceDictionaryProperties({
+        rootAttributes: {
+          'mc:Ignorable': 'd',
+        },
+      }),
+    ).to.throw(
+      'xaml/resourceDictionary rootAttributes["mc:Ignorable"] uses namespace prefix "mc" but options.namespaces does not declare it',
+    );
+  });
+
   it('should throw for invalid resourceReferenceType values', () => {
     expect(() =>
       setXamlResourceDictionaryProperties({

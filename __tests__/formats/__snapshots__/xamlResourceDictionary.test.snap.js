@@ -133,6 +133,7 @@ snapshots["formats xaml/resourceDictionary with namespace overrides and root att
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:local="clr-namespace:MyApp.Resources"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   mc:Ignorable="d">
   <!-- Brand primary color -->
   <Color x:Key="ColorBrandPrimary">#FF0B8599</Color>
@@ -169,4 +170,3 @@ snapshots["formats xaml/resourceDictionary with a resourceFactory should match s
 </ResourceDictionary>
 `;
 /* end snapshot formats xaml/resourceDictionary with a resourceFactory should match snapshot */
-
