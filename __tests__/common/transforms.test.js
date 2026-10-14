@@ -816,6 +816,17 @@ describe('common', () => {
           expect(value).to.equal('#aaaaaa');
         });
 
+        it('should output hex for colors with an alpha of 1', () => {
+          const value = transforms[colorCss].transform(
+            {
+              value: 'rgba(170, 170, 170, 1)',
+            },
+            {},
+            {},
+          );
+          expect(value).to.equal('#aaaaaa');
+        });
+
         it('should handle colors with transparency', () => {
           const value = transforms[colorCss].transform(
             {
@@ -825,6 +836,29 @@ describe('common', () => {
             {},
           );
           expect(value).to.equal('rgba(170, 170, 170, 0.6)');
+        });
+
+        it('should preserve legacy alpha precision', () => {
+          const value = transforms[colorCss].transform(
+            {
+              value: 'rgba(0, 0, 0, 0.0625)',
+            },
+            {},
+            {},
+          );
+          expect(value).to.equal('rgba(0, 0, 0, 0.0625)');
+        });
+
+        it('should preserve DTCG alpha precision', () => {
+          const value = transforms[colorCss].transform(
+            {
+              $value: { colorSpace: 'srgb', components: [0, 0, 0], alpha: 0.0625 },
+              $type: 'color',
+            },
+            {},
+            { usesDtcg: true },
+          );
+          expect(value).to.equal('rgba(0, 0, 0, 0.0625)');
         });
       });
 
@@ -2525,6 +2559,18 @@ describe('common', () => {
 
         allTokensNonDtcg.forEach((it, idx) => {
           expect(getTokenDimensionValue(it.value)).to.deep.equal(expected[idx]);
+        });
+      });
+
+      it('should gracefully handle dimension values that cannot be parsed', () => {
+        expect(getTokenDimensionValue('something weird')).to.deep.equal({
+          value: 'something weird',
+          unit: undefined,
+        });
+
+        expect(getTokenDimensionValue('calc(100% - 20px)')).to.deep.equal({
+          value: 'calc(100% - 20px)',
+          unit: undefined,
         });
       });
     });

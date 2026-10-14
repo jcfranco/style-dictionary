@@ -1,5 +1,77 @@
 # Changelog
 
+## 5.6.1
+
+### Patch Changes
+
+- 7a80396: Fix `sortByReference` collecting "filtered out token references" warnings while sorting. With multiple levels of references, it reported references of tokens that are never output, and `outputReferencesFilter` could not clear those warnings.
+
+## 5.6.0
+
+### Minor Changes
+
+- 2f28731: Add "sassdoc" comment style (a triple-slash short comment)
+
+### Patch Changes
+
+- 76074dc: Fix `outputReferences` leaking a raw `{group.$root}` placeholder into formatted output instead of resolving it, when a reference path segment (e.g. a DTCG `$root` token) contains a RegExp special character.
+
+## 5.5.5
+
+### Patch Changes
+
+- bc51123: Fix prototype pollution [GHSA-cr3w-v879-f973](https://github.com/style-dictionary/style-dictionary/security/advisories/GHSA-cr3w-v879-f973) and [GHSA-5pgh-4v89-hfqj](https://github.com/style-dictionary/style-dictionary/security/advisories/GHSA-5pgh-4v89-hfqj) for nested objects created by the `convertTokenData` utility in "object" output mode.
+
+## 5.5.4
+
+### Patch Changes
+
+- 0170a9a: Patch @bundled-es-modules/glob which fixes a transitive dependency vulnerability (glob->url->qs).
+
+## 5.5.3
+
+### Patch Changes
+
+- 863685d: Limit nested composite token expansion to the configured type filters.
+- 2aced93: Preserve alpha precision in the `color/css` transform.
+
+## 5.5.2
+
+### Patch Changes
+
+- b65ea0b: Disallow output literal "undefined" for tokens with descriptions when commentStyle is set to none.
+
+## 5.5.1
+
+### Patch Changes
+
+- ef1dbc8: Add better prototype pollution mitigation for convertTokenData utility.
+  See [GitHub Advisory GHSA-xmr7-549p-98w3](https://github.com/style-dictionary/style-dictionary/security/advisories/GHSA-xmr7-549p-98w3)
+
+## 5.5.0
+
+### Minor Changes
+
+- b63dc05: Add `emitEmptyFiles` option to write output files even when no tokens match the file's filter, instead of skipping them.
+
+### Patch Changes
+
+- e319976: Fix regression to gracefully handle unparseable dimension tokens which is required to support custom dimension tokens from third party vendors like Tokens Studio.
+
+## 5.4.4
+
+### Patch Changes
+
+- 23b5e8d: Fix prototype pollution vulnerability in the `convertTokenData` utility function, this was introduced in version `4.3.0`.
+  Any token key that includes `__proto__` will be ignored.
+  See [Security Advisory GHSA-vj5c-m527-mpff](https://github.com/style-dictionary/style-dictionary/security/advisories/GHSA-vj5c-m527-mpff).
+
+## 5.4.3
+
+### Patch Changes
+
+- 371dbcb: Get proper deepmerge types in, fix small potential bug for `StyleDictionary.extend()`, flagged by type safety improvement.
+
 ## 5.4.2
 
 ### Patch Changes
